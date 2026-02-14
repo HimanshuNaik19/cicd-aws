@@ -8,6 +8,13 @@ pipeline {
     }
     
     stages {
+        stage('Checkout') {
+            steps {
+                echo '📥 Checking out code from GitHub...'
+                checkout scm
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 echo '� Building Docker image...'
@@ -16,7 +23,7 @@ pipeline {
                         docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} \
                         -t ${DOCKER_IMAGE}:latest \
                         --target production \
-                        -f /project/frontend/Dockerfile /project/frontend/
+                        -f frontend/Dockerfile frontend/
                     """
                 }
             }
