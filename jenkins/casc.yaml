@@ -1,0 +1,43 @@
+# Jenkins Configuration as Code (JCasC)
+# This file auto-configures Jenkins on startup
+
+jenkins:
+  systemMessage: "DevOps CI/CD Server - Ready!"
+  numExecutors: 2
+  
+  # Security: Admin user
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: "admin123"
+  
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+# Tools: Git and Docker
+tool:
+  git:
+    installations:
+      - name: "Default"
+        home: "git"
+
+# Credentials (Update these with your real credentials)
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              scope: GLOBAL
+              id: "docker-hub"
+              username: "himanshunaik22"
+              password: "YOUR_DOCKERHUB_PASSWORD_HERE"
+              description: "Docker Hub Credentials"
+          - usernamePassword:
+              scope: GLOBAL
+              id: "github"
+              username: "HimanshuNaik19"
+              password: "YOUR_GITHUB_TOKEN_HERE"
+              description: "GitHub Credentials"

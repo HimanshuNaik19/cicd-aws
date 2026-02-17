@@ -1,0 +1,76 @@
+pipeline {
+    agent any
+    
+    environment {
+        DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials')
+        DOCKER_HUB_REPO = 'himanshunaik22'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/HimanshuNaik19/cicd-aws.git'
+            }
+        }
+        
+        stage('Build Backend') {
+            steps {
+                dir('backend') {
+                    sh 'docker build -t ${DOCKER_HUB_REPO}/devops-backend:${IMAGE_TAG} .'
+                    sh 'docker build -t ${DOCKER_HUB_REPO}/devops-backend:latest .'
+                }
+            }
+        }
+        
+        stage('Build Frontend') {
+            steps {
+                dir('frontend') {
+                    sh 'docker build -t ${DOCKER_HUB_REPO}/devops-frontend:${IMAGE_TAG} .'
+                    sh 'docker build -t ${DOCKER_HUB_REPO}/devops-frontend:latest .'
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                // Add your test commands here
+            }
+        }
+        
+        stage('Push to Docker Hub') {
+            steps {
+                sh 'echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin'
+                sh 'docker push ${DOCKER_HUB_REPO}/devops-backend:${IMAGE_TAG}'
+                sh 'docker push ${DOCKER_HUB_REPO}/devops-backend:latest'
+                sh 'docker push ${DOCKER_HUB_REPO}/devops-frontend:${IMAGE_TAG}'
+                sh 'docker push ${DOCKER_HUB_REPO}/devops-frontend:latest'
+            }
+        }
+        
+        stage('Deploy to Kubernetes') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo 'Deploying to Kubernetes...'
+                sh 'kubectl apply -f kubernetes/app.yaml'
+                sh 'kubectl set image deployment/backend backend=${DOCKER_HUB_REPO}/devops-backend:${IMAGE_TAG} -n devops-app'
+                sh 'kubectl set image deployment/frontend frontend=${DOCKER_HUB_REPO}/devops-frontend:${IMAGE_TAG} -n devops-app'
+            }
+        }
+    }
+    
+    post {
+        always {
+            sh 'docker logout'
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}

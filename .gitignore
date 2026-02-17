@@ -4,10 +4,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Production builds
-/frontend/build
-/backend/dist
-
 # Environment variables
 .env
 .env.local
@@ -15,22 +11,10 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
-# Terraform
-*.tfstate
-*.tfstate.*
-.terraform/
-.terraform.lock.hcl
-*.tfvars
-!terraform.tfvars.example
-crash.log
-override.tf
-override.tf.json
-*_override.tf
-*_override.tf.json
-
-# Kubernetes secrets
-kubernetes/secrets/*.yaml
-!kubernetes/secrets/example.yaml
+# Build outputs
+build/
+dist/
+*.log
 
 # IDE
 .vscode/
@@ -38,35 +22,32 @@ kubernetes/secrets/*.yaml
 *.swp
 *.swo
 *~
-.DS_Store
-
-# Logs
-logs/
-*.log
-
-# Docker
-.dockerignore
-
-# Jenkins
-.jenkins/
-
-# Temporary files
-tmp/
-temp/
-*.tmp
-
-# AWS
-.aws/
-
-# Helm
-helm/**/charts/
-helm/**/Chart.lock
-
-# Coverage reports
-coverage/
-*.coverage
-.nyc_output/
 
 # OS
+.DS_Store
 Thumbs.db
-jenkins/casc.yaml
+
+# Docker
+*.tar
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Jenkins
+jenkins_home/
+
+# Kubernetes
+*.kubeconfig
+
+# Monitoring data
+prometheus_data/
+grafana_data/
+postgres_data/
+
+# Secrets
+*.pem
+*.key
+credentials.json
