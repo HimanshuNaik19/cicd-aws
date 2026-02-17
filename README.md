@@ -269,26 +269,4 @@ docker stop <container_id>
 
 ---
 
-## 👤 Author
 
-**Himanshu Naik**
-- GitHub: [@HimanshuNaik19](https://github.com/HimanshuNaik19)
-- LinkedIn: [Himanshu Naik](https://linkedin.com/in/himanshunaik)
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-## 🙏 Acknowledgments
-
-Built as a DevOps portfolio project demonstrating:
-- Modern application development
-- Cloud-native architecture
-- CI/CD best practices
-- Infrastructure as Code
-- Container orchestration
-- Monitoring and observability
